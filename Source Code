@@ -1,0 +1,58 @@
+#Source Code
+#Install Tkinter & import it 
+import tkinter as tk
+from tkinter import messagebox
+
+class TicTacToe:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Tic Tac Toe")
+
+        self.current_player = "X"
+        self.board = ["", "", "", "", "", "", "", "", ""]
+
+        self.buttons = []
+        for i in range(9):
+            button = tk.Button(self.master, text="", width=4, height=2,
+                               font=('Helvetica', '24'), command=lambda i=i: self.click_button(i))
+            button.grid(row=i//3, column=i%3)
+            self.buttons.append(button)
+
+        self.status_label = tk.Label(self.master, text=f"Current player: {self.current_player}",
+                                     font=('Helvetica', '16'))
+        self.status_label.grid(row=3, column=0, columnspan=3)
+
+    def click_button(self, i):
+        if self.board[i] == "":
+            self.board[i] = self.current_player
+            self.buttons[i].config(text=self.current_player)
+            self.check_win()
+            self.current_player = "O" if self.current_player == "X" else "X"
+            self.status_label.config(text=f"Current player: {self.current_player}")
+
+    def check_win(self):
+        win_combinations = [(0, 1, 2), (3, 4, 5), (6, 7, 8),
+                            (0, 3, 6), (1, 4, 7), (2, 5, 8),
+                            (0, 4, 8), (2, 4, 6)]
+        for i, j, k in win_combinations:
+            if self.board[i] == self.board[j] == self.board[k] != "":
+                messagebox.showinfo("Winner!", f"{self.current_player} wins!")
+                self.reset_board()
+
+        if "" not in self.board:
+            messagebox.showinfo("Draw!", "The game ended in a draw.")
+            self.reset_board()
+
+    def reset_board(self):
+        self.board = ["", "", "", "", "", "", "", "", ""]
+        for i in range(9):
+            self.buttons[i].config(text="")
+        self.current_player = "X"
+        self.status_label.config(text=f"Current player: {self.current_player}")
+
+root = tk.Tk()
+game = TicTacToe(root)
+root.mainloop()
+
+#You Can Also Customise This Code To Add More Features Such As -> Score Board
+, Player Name Input , Timer 
